@@ -2,7 +2,7 @@
 
 [toc]
 
-## 第二章
+## Chap 2
 
 C程序解剖：
 
@@ -16,6 +16,24 @@ C程序解剖：
 + 小写字母、大写字母、数字和下划线
 + 区分大小写
 + 第一个字符必须是字符或下划线，不能是数字
+
+关键字和保留标识符：
+
+| C11      |          |          |                |
+| :------- | -------- | -------- | -------------- |
+| auto     | extern   | short    | while          |
+| break    | float    | signed   | \_Alignas      |
+| case     | for      | sizeof   | \_Alignof      |
+| char     | goto     | static   | \_Atomic       |
+| const    | if       | struct   | \_Bool         |
+| continue | inline   | switch   | _Complex       |
+| default  | int      | typedef  | \_Generic      |
+| do       | long     | union    | \_Imaginary    |
+| double   | register | unsigned | \_Noreturrn    |
+| else     | restrict | void     | _Static_assert |
+| enum     | return   | volatile | \_Thread_local |
+
+关键字使用不当时编译器会视为语法错误。
 
 自定义函数：
 
@@ -39,5 +57,6 @@ void butler(void) /*函数定义开始*/
 
 `butler()` 函数出现了三次。第一次函数原型（prototype），告知编译器；第二次函数调用（function call）；第三次函数定义（function definition）。`void butler(void)` 第一个void表明函数没有返回值，第二个void表面函数不带参数。C语言中，函数也可以调用另一个函数。
 
-## 第三章
+## Chap 3
 
+数据类型关键字
