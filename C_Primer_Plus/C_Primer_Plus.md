@@ -99,3 +99,43 @@ void butler(void) /*函数定义开始*/
 + 在任何区间内都存在无穷多实数因此计算机的浮点数并不能表示区间内所有的值，浮点数通常只是实际值的近似值。7.0可能被存储位浮点值6.99999。
 + 在过去，浮点运算慢于整数运算，现在CPU中包含了浮点处理器，缩小了差距。
 
+#### int变量
+
+声明和赋值int：
+
+```c
+int erns;
+int hogs, cows, goats;
+
+cows = 112;
+```
+
+初始化int可以通过赋值变量或者直接在声明中完成：
+
+```c
+int hogs = 21;
+int cos = 32, goats = 14;
+int dogs, cats =94; /*valid but terrible*/
+```
+
+最后一行中仅初始化了cats，没有初始化dogs。但容易误认为两个都被初始化了，因此最好避免把初始化和未初始化的变量放在同一条声明中。
+
+<img src="https://raw.githubusercontent.com/qihaozhuo/imgBed/main/PicGo/202201091823930.png" alt="image-20220109182348830" style="zoom:67%;" />
+
+打印时用%d指定打印整数的位置。
+
+其他整数类型：
+
++ short int，有符号类型。
++ long int，有符号类型。
++ long long int或long long，有符号类型。
++ unsigned int或unsigned只用于非负值的场合，16位unsigned int取值范围0~65535，而非-32756~32767。
++ C90添加了unsigned  long int、unsigned long、unsigned int、unsigned short。
++ C99添加了unsigned long long int和unsigned long long。
++ 任何有符号类型前添加signed可以强调使用有符号。short、short int、signed short、signed short int都表示同一种类型。
+
+现在PC上常见的设置为long long占64位，long占32位，short占16位，int占16位或32位。
+
+对于常数，当超出int范围时编译器会将其视为long int，如果超出long范围，则视为unsigned long，再超出则视为long long或者unsigned long long。如果要将一个较小的常量作为long类型，可以在值得末尾加l或者L，比如7L，后缀l比较有误解性，L更好。类似地，020L和0x10L将八进制和十六进制作为long储存。同样地，5ull、10LLU、6LLU或9Ull。
+
+打印整数类型时，%u表示unsigned，%l表示long类型。x和o前面可以用l前缀，%lx表示以十六进制打印long类型整数，%lo表示以八进制打印long。
