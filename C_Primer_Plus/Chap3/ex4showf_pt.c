@@ -8,7 +8,7 @@ int main(void)
     printf("%f can be written %e\n", aboat, aboat);
     printf("And it's %a in hexadecimal, power of 2 notation\n", aboat);
     printf("%f can be written %e\n", abet, abet);
-    printf("%Lf canbe written %Le\n", dip, dip);
+    printf("%Lf can be written %Le\n", dip, dip);
 
     return 0;
 }

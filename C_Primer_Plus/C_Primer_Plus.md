@@ -2,7 +2,7 @@
 
 [toc]
 
-## Chap 2
+## Chap 2 概述
 
 C程序解剖：
 
@@ -57,7 +57,7 @@ void butler(void) /*函数定义开始*/
 
 `butler()` 函数出现了三次。第一次函数原型（prototype），告知编译器；第二次函数调用（function call）；第三次函数定义（function definition）。`void butler(void)` 第一个void表明函数没有返回值，第二个void表面函数不带参数。C语言中，函数也可以调用另一个函数。
 
-## Chap 3
+## Chap 3 数据和C
 
 ### 数据类型
 
@@ -245,7 +245,50 @@ C99添加了十六进制表示浮点型常量的格式，在十六进制数前�
 
 #### 复数和虚数类型
 
+C99支持复数类型和虚数类型，但有所保留。C11标准把整个复数软件包都作为可选项。C语言有三种复数类型：
 
++ float_Complex
++ double_Complex
++ long double_Complex
+
+例如，float_Complex应包括两个float类型的值，分别表示实部和虚部。类似地，C语言的三种虚数类型：
+
++ float_Imaginary
++ double_Imaginary
++ long double_Imaginary
+
+C语言标准没有直接采用complex作为类型关键字而是使用\_Complex，通过添加一个头文件，在该头文件中把complex定义为\_Complex。这是考虑到直接换用complex会导致很多人的已有代码失效。
+
+#### 其他类型
+
+C语言没有字符串类型，但也能很好地处理字符串。C语言还有一些从基本类型衍生出来的其他类型，包括数组、指针、结构和联合。
+
+#### 小结
+
++ 基本数据类型由11个关键字组成：int、long、short、unsigned、cahr、float、double、signed、\_Bool、\_Complex、\_Imaginary
++ 有符号整型可用于表示正整数和负整数：
+  + int：系统给定的基本整数类型，C语言规定int类型不小于16位。
+  + short/short int：最大的short类型整数小于或等于最大的int类型整数。C语言规定short类型至少占16位。
+  + long/long int：该类型可表示的整数大于或等于最大的int类型整数，C语言规定long类型至少占32位。
+  + long long/long long int：该类型可表示的整数大于或等于最大的long类型整数，long long类型至少占64位。
+  + 一般而言，long类型占用内存比short类型大，int类型的宽度要么和long相同，要么和short相同。
++ 无符号整型只能用于表示零和正整数，因此无符号整型可表示的正整数比有符号整型大。在整型类型前加上关键字unsigned声明其为无符号整型：unsigned int、unsigned long、unsigned short。单独的unsigned相当于unsigned int。
++ 可打印出来的符号都是字符。根据定义， cahr类型表示一个字符要占用1字节内存。需要时可以在char前边加上关键字signed或unsigned来指明具体使用类型。
++ 布尔值类型\_Bool表示true和false。C语言用1表示true，0表示false。是无符号int类型。
++ 实浮点类型可以表示正浮点数和负浮点数：
+  + float：系统的基本浮点类型，可精确表示至少6位有效数字。
+  + double：储存浮点数的范围更大，能表示比float更多的有效数字，至少10位。
+  + long double：储存范围更大。
++ 复数和虚数浮点数：float_Complex、double_Complex、long double_Complex、float_Imaginary、double_Imaginary、long double_Imaginary
++ 声明简单变量：
+  + 类型说明符 变量名：int erest; 
+  + 多个说明符 变量名：unsigned short cash;
+  + 同时声明相同类型的多个变量，用逗号分隔变量名：char ch, init, ans;
+  + 声明的同时初始化变量：float mass =  6.0E24;
+
+## Chap 4 字符串和格式化输入/输出
+
+### 字符串
 
 
 
