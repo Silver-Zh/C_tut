@@ -1,3 +1,4 @@
+//显示字符的代码编号
 # include <stdio.h>
 int main(void)
 {

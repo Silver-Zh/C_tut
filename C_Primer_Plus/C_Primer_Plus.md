@@ -263,6 +263,22 @@ C语言标准没有直接采用complex作为类型关键字而是使用\_Complex
 
 C语言没有字符串类型，但也能很好地处理字符串。C语言还有一些从基本类型衍生出来的其他类型，包括数组、指针、结构和联合。
 
+#### 转换说明
+
++ %d打印整数int。
++ %ld打印long整数。
++ %lx以十六进制打印long整数。
++ %lo以八进制打印long整数。
++ %hd十进制打印short整数。
++ %ho八进制打印short整数。
++ %lu打印unsigned long。
++ %lld和%llu分别表示有符号和无符号。
++ %c打印char字符，%d打印char类型变量会输出对应整数值。
++ %f十进制打印float和double浮点数。
++ %e打印指数计数法的浮点数。
++ 如果系统支持十六进制浮点数，可以用a和A分别代替e和E。
++ %Lf，%Le或%La打印long double浮点数。
+
 #### 小结
 
 + 基本数据类型由11个关键字组成：int、long、short、unsigned、cahr、float、double、signed、\_Bool、\_Complex、\_Imaginary
@@ -312,5 +328,146 @@ int main(void)
 }
 ````
 
+%s用于打印字符串，无需亲自把空字符\0放进字符串末尾，scanf在读取输入时已经完成了这项工作，也无需在define字符串常量时在末尾添加。**注意**scanf在遇到第一个空格、制表符或换行符时就会停止读取输入。
 
+### strlen()函数
+
+````c
+//如果编译器不识别%zd，尝试换成%u或者%lu
+#include <stdio.h>
+#include <string.h>
+#define PRAISE "You are an extraordinary being."
+int main(void)
+{
+    char name[40];
+
+    printf("What's your name? ");
+    scanf("%s",name);
+    printf("Hello, %s. %s\n", name, PRAISE);
+    printf("Your name of %zd letters occupies %zd memory cells.\n", strlen(name), sizeof name);
+    printf("The phrase of praise has %zd letters ", strlen(PRAISE));
+    printf("and occupies %zd memory cells.\n", sizeof PRAISE);
+
+    return 0;
+}
+````
+
+如果使用ANSI C之前的编译器必须移除``#include <string.h>``，string.h头文件包含多个与字符串相关的函数原型，包括strlen()。一些ANSI之前的UNIX系统使用strings.h代替string,h，也包含了一些字符串函数的声明。
+
+一般而言，C把函数库中相关的函数归为一类，并为每类韩叔叔提供一个头文件，例如printf()和scanf()都隶属标准输入和输出函数，使用stdio.h头文件。
+
+sizeof运算符报告，name数组有40个存储单元，但是只有前一部分单元用来存储输入，所以strlen()的结果不一定是40。strlen()并未计入末尾的空字符。
+
+对于PRAISE，strlen()得出的也是字符串中的字符数，包含空格和标点符号。sizeof则将空字符也计算在内。C99和C11专门为sizeof运算符的返回类型添加了%zd转换说明，这对于strlen()同样适用。对于早期的C，就还需要知道sizeof和strlen()返回的实际类型，通常是unsigned或者unsigned long。
+
+另外还需要注意，sizeof后圆括号的使用取决于对象，对象是类型时圆括号必不可少，比如sizeof(char)以及sizeof(float)。对于特定的变量，可有可无，比如sizeof name，但建议任何情况下都使用圆括号。
+
+### 常量和C预处理器
+
+创建符号常量的方法之一就是声明一个变量并赋值，但程序可能会无意间改变它的值。C语言提供了一个更好的方案，C预处理器，``#define TAXRATE 0.015``。编译程序时，程序中所有的TAXRATE都会被替换成0.015，这一过程被成为编译时替换compile-time substitution。通常这样定义的常量也称为明示常量manifest constant。注意其中并没有=符号。末尾也不用加分号。用全大写表示符号常量是C语言一贯的传统，提高程序可读性。另外还有一种不常用的命名约定，即在名称前带c\_或k\_前缀来表示常量，如c\_level或k\_level。符号常量的命名规则与变量相同，可以使用大小写字母、数字和下划线字符，首字符不能为数字。
+
+![image-20220517164104243](https://raw.githubusercontent.com/qihaozhuo/imgBed/main/PicGo/image-20220517164104243.png)
+
+``#define``指令还可以定义字符和字符串常量，前者使用单引号，后者使用双引号：
+
++ ``#define BEEP '\a'``
++ ``#define TEA 'T'``
++ ``#define ESC '\033'``
++ ``#define OOPS "Now you have done it!"``
+
+**注意**符号常量名后面的内容被用来替换符号常量，不要犯以下错误：
+
+``#define TOES = 20``
+
+这样的话替换TOES的会是=20，而不是20。
+
+#### const限定符
+
+C90标准新增了const关键字，用于限定一个变量为只读，注意const是**变量**而不是常量。
+
+````c
+const int MONTHS = 12;//MONTHS在程序中不可更改，值为12
+````
+
+这使得MONTHS成为只读值，也就是说可以在计算中使用MONTHS，可以打印MONTHS，但是不能更改MONTHS的值。const使用起来比#define更灵活，第12章将更多讨论const。
+
+#### 明示常量
+
+头文件limits.h和float.h分别提供了与整数类型和浮点类型**大小限制**相关的详细信息，每个头文件都定义了一系列供实现使用的明示常量。例如limits.h头文件包含一下代码：
+
+````c
+#define INT_MAX +32767
+#define INT_MIN -32768
+````
+
+这些明示常量代表int类型克表示的最大值和最小值，如果系统使用32位的int，该头文件会为这些明示常量提供不同的值。如果在程序中包含limits.h头文件，就可编写以下代码：
+
+````c
+printf("Maximum int value on this system = %d\n", INT_MAX);
+````
+
+如果系统使用4字节的int，limits.h头文件就会提供符合4字节int的INT_MAX和INT_MIN。
+
+limits.h中的一些明示常量：
+
+| 明示常量   | 含义                           |
+| ---------- | ------------------------------ |
+| CHAR_BIT   | char类型的位数                 |
+| CHAR_MAX   | char类型的最大值               |
+| CHAR_MIN   | char类型的最小值               |
+| SCHAR_MAX  | signed char类型的最大值        |
+| SCHAR_MIN  | signed char类型的最小值        |
+| UCHAR_MAX  | unsigned char类型的最大值      |
+| SHRT_MAX   | short类型的最大值              |
+| SHRT_MIN   | short类型的最小值              |
+| USHRT_MAX  | unsigned short类型的最大值     |
+| INT_MAX    | int类型的最大值                |
+| INT_MIN    | int类型的最小值                |
+| UINT_MAX   | unsigned int类型的最大值       |
+| LONG_MAX   | long类型的最大值               |
+| LONG_MIN   | long类型的最小值               |
+| ULONG_MAX  | unsigned long类型的最大值      |
+| LLONG_MAX  | long long类型的最大值          |
+| LLONG_MIN  | long long类型的最小值          |
+| ULLONG_MAX | unsigned long long类型的最大值 |
+
+float.h中的一些明示常量，将FLT分别替换成DBL和LDBL就可分别表示double和long double类型对应的明示常量：
+
+| 明示常量       | 含义                                              |
+| -------------- | ------------------------------------------------- |
+| FLT_MANT_DIG   | float类型的尾数位数                               |
+| FLT_DIG        | float类型的最少有效数字位数（十进制）             |
+| FLT_MIN_10_EXP | 带全部有效数字的float类型的最小负指数（以10为底） |
+| FLT_MAX_10_EXP | float类型的最大正指数（以10为底）                 |
+| FLT_MIN        | 保留全部精度的float类型最小正数                   |
+| FLT_MAX        | float类型的最大正数                               |
+| FLT_EPSILON    | 1.00和比1.00大的最小float类型值之间的差值         |
+
+### printf()和scanf()
+
+printf()和scanf()属于输入/输出函数，I/O函数。这些函数曾经并不是C语言定义的一部分，C90和C99标准规定了这些函数的标准版本。printf()是输出函数，scanf()是输入函数，但工作原理几乎相同，两个函数都是用格式字符串和参数列表。
+
+#### printf()函数
+
+请求printf()函数打印数据的指令要与待打印数据的类型相匹配，即转换说明conversion specification，它们制定了如何把数据转换成可显示的形式。ANSI C标准为printf()提供的转换说明：
+
+| 转换说明 | 输出                                                         |
+| -------- | ------------------------------------------------------------ |
+| %a       | 浮点数、十六进制数和p计数法（C99/C11）                       |
+| %A       | 浮点数、十六进制数和p计数法（C99/C11）                       |
+| %c       | 单个字符                                                     |
+| %d       | 有符号十进制书                                               |
+| %e       | 浮点数，e计数法                                              |
+| %E       | 浮点数，e计数法                                              |
+| %f       | 浮点数，十进制计数法                                         |
+| %g       | 根据值的不同，自动选择%f或%e。%e用于指数小于-4或这大于等于精度时 |
+| %G       | 根据值的不同，自动选择%f或%E。%E用于指数小于-4或这大于等于精度时 |
+| %i       | 有符号十进制整数，与%d相同                                   |
+| %o       | 无符号八进制整数                                             |
+| %p       | 指针                                                         |
+| %s       | 字符串                                                       |
+| %u       | 无符号十进制整数                                             |
+| %x       | 无符号十六进制整数，使用十六进制数0f                         |
+| %X       | 无符号十六进制整数，使用十六进制数0F                         |
+| %%       | 打印一个百分号                                               |
 

@@ -1,3 +1,4 @@
+//your weight in platinum
 #include <stdio.h>
 
 int main(void)
