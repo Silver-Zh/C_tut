@@ -290,15 +290,27 @@ C语言没有字符串类型，但也能很好地处理字符串。C语言还有
 
 ### 字符串
 
+C语言没有专门用于储存字符串的变量类型，字符串都被储存再char类型的数组中。
 
+![image-20220516131509584](https://raw.githubusercontent.com/qihaozhuo/imgBed/main/PicGo/image-20220516131509584.png)
 
+图中数组末尾的字符\\0是空字符null character，C语言用其标记字符串的结束。空字符不是数字0，而是一个非打印字符，ASCII码值是0。C语言中字符串一定以空字符结束，这意味着数组的容量必须至少比待存储字符串中的字符数多1。
 
+通过声明`char name[40]`创建了一个包含40个元素的数组，每个元素储存一个char类型的值。
 
+````C
+//使用不同类型的字符串
+#include <stdio.h>
+#define PRAISSE "You are an extraordinary being."
+int main(void)
+{
+    char name[40];
 
-
-
-
-
+    printf("What's your name? ");
+    scanf("%s", name);
+    printf("Hello, %s. %s\n", name, PRAISSE);
+}
+````
 
 
 
